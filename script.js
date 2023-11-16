@@ -3,29 +3,46 @@ const clearBtn = document.querySelector('.main-btn__clear-btn');
 const input = document.querySelector('.main-input');
 const list = document.querySelector('.main-list');
 
-const clearTaskList = () => list.innerHTML = '';
+let itemsArray = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
 
-const addTask = () => {
-  
-  const task = input.value;
+localStorage.setItem('items', JSON.stringify(itemsArray));
+const data = JSON.parse(localStorage.getItem('items'));
 
-  const deleteBtn = document.createElement('button');
-  deleteBtn.classList.add('main-btn__delete-btn');
-  deleteBtn.textContent = 'Удалить';
-  
+const createTask = (text) => {
   const itemList = document.createElement('li');
-  itemList.classList.add('main-item');
-  itemList.textContent = task;
-  
-  deleteBtn.addEventListener('click', () => {
-    list.removeChild(itemList);    
-  });
-
-  itemList.appendChild(deleteBtn);
+  itemList.textContent = text;
   list.appendChild(itemList);
 
-  input.value = '';
+  const btnItem = document.createElement('button');
+  btnItem.textContent = 'Удалить';
+  itemList.appendChild(btnItem);
+
+  btnItem.addEventListener('click', () => {
+    const indexToRemove = itemsArray.indexOf(text);
+    if (indexToRemove !== -1) {
+      itemsArray.splice(indexToRemove, 1);
+      localStorage.setItem('items', JSON.stringify(itemsArray));
+    }
+    list.removeChild(itemList);
+  });
 }
 
-addBtn.addEventListener('click', addTask);
-clearBtn.addEventListener('click', clearTaskList);
+addBtn.addEventListener('click', () => {
+  const task = input.value;
+  itemsArray.push(task);
+  localStorage.setItem('items', JSON.stringify(itemsArray));
+  createTask(task);
+  input.value = "";
+});
+
+data.forEach(item => {
+  createTask(item);
+});
+
+clearBtn.addEventListener('click', function () {
+  localStorage.clear();
+  while (list.firstChild) {
+    list.removeChild(list.firstChild);
+  }
+  itemsArray = [];
+});
