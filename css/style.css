@@ -37,7 +37,7 @@ body {
 
 .main-input {
   height: 30px;
-  width: 50vw;
+  width: 640px;
   padding: 5px;
   border: 1px solid #f3f3f3;
   border-radius: 6px;
@@ -133,3 +133,18 @@ svg path {
   transform: scale(1.5);
 }
 
+@media (min-width: 320px) and (max-width: 560px) {
+  .main-title {
+    font-size: 2em;
+  }
+
+  .main-input {
+    width: 100%;
+  }
+}
+
+@media (min-width: 561px) and (max-width: 900px) {
+  .main-input {
+    width: 70vw;
+  }
+}
